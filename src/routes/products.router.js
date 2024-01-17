@@ -1,31 +1,52 @@
-const express = require("express"); 
-const router = express.Router(); 
+const express = require("express");
+const router = express.Router();
 
-//Array para almacenar usuarios. 
-const users = []; 
+const ProductManager = require("../controllers/product-manager.js");
+const productManager = new ProductManager("./src/models/productos.json");
 
-//Routes
 
-router.get("/", (req, res) => {
-    res.json(users); 
+//Rutas: 
+
+
+router.get("/products", async (req, res) => {
+    try {
+        const limit = req.query.limit;
+        const productos = await productManager.getProducts();
+        if (limit) {
+            res.json(productos.slice(0, limit));
+        } else {
+            res.json(productos);
+        }
+    } catch (error) {
+
+        console.error("Error al obtener productos", error);
+        res.status(500).json({
+            error: "Error interno del servidor"
+        });
+    }
 })
 
-router.post("/", (req, res) => {
-    const nuevoUsuario = req.body; 
-    users.push(nuevoUsuario); 
-    res.send({status: "success", message: "Usuario creado correctamente"}); 
+
+router.get("/products/:pid", async (req, res) => {
+
+    const id = req.params.pid;
+
+    try {
+
+        const producto = await productManager.getProductById(parseInt(id));
+        if (!producto) {
+            return res.json({
+                error: "Producto no encontrado"
+            });
+        }
+
+        res.json(producto);
+    } catch (error) {
+        console.error("Error al obtener producto", error);
+        res.status(500).json({
+            error: "Error interno del servidor"
+        });
+    }
 })
 
-//Ejemplo de middleware a nivel de endpoint: 
-
-function middleware(req, res, next) {
-    console.log("Middleware de nivel de endpoint"); 
-    next(); 
-}
-
-router.get("/middleware", middleware,  (req, res) => {
-    res.send("Middleware a nivel de endpoint"); 
-})
-
-
-module.exports = router;
+module.exports = router; 

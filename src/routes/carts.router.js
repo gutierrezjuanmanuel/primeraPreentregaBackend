@@ -1,19 +1,19 @@
-const express = require("express"); 
-const router = express.Router(); 
+const express = require("express");
+const router = express.Router();
 
-//Array para almacenar mascotas. 
-const pets = []; 
+const ProductManager = require("../controllers/product-manager.js");
+const productManager = new ProductManager("./src/models/carrito.json");
 
-//Routes: 
+//Rutas: 
 
-router.get("/", (req, res) => {
-    res.json(pets);
-})
-
-router.post("/", (req, res) => {
-    const nuevoMascota = req.body; 
-    pets.push(nuevoMascota); 
-    res.send({status: "success", message: "Mascota creada correctamente"});
+router.get("/carts", async (req, res) => {
+    try {
+        const carts = await productManager.getProducts();
+        res.json(carts)
+    } catch (error) {
+        console.error("Error al obtener el carrillo", error);
+        res.json({ error: "Error del servidor" });
+    }
 })
 
 module.exports = router; 

@@ -42,9 +42,18 @@ class ProductManager {
 
     }
 
-    getProducts() {
-        console.log(this.products);
+    async getProducts() {
+        try {
+            //Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo.
+
+            const arrayProductos = this.leerArchivo();
+            return arrayProductos;
+        } catch (error) {
+            console.log("Error al leer el archivo", error);
+        }
+
     }
+
 
     async getProductById(id) {
         try {
