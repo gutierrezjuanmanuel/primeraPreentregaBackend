@@ -96,14 +96,13 @@
     "vary": "^1.1.2",
     "yallist": "^4.0.0"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.3"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
 }
